@@ -121,7 +121,14 @@ class Start_Gateway_Model_Paymentmethod extends Mage_Payment_Model_Method_Abstra
             $charge = Start_Charge::create($charge_args);
             //need to process charge as success or failed
         }catch(Start_Error $e){
-            $errorMsg = $e->getMessage() . '('. $e->getErrorCode() .')';
+            $error_code = $e->getErrorCode();
+
+            if ( $error_code === "card_declined" ) {
+                $errorMsg = $e->getMessage() . ' Please, return to "Payment Information" step and try with another card.';
+            } else {
+                $errorMsg = $e->getMessage();
+            }
+
             Mage::throwException($errorMsg);
         }
         //need to process charge as success or failed
