@@ -1,0 +1,62 @@
+<script>
+    var key = '<?php
+        if($this->getMethod()->getConfigData('test_mode'))
+            echo $this->getMethod()->getConfigData('test_open_key');
+        else
+            echo $this->getMethod()->getConfigData('live_open_key');
+    ?>';
+        if(StartCheckout){
+            StartCheckout.config({
+                key: key,
+                label: 'Enter Your Card Details',
+                form_label: 'Add Card',
+                complete: function(params) {
+                  submitFormWithToken(params); // params.token.id, params.email
+                }
+            });
+        }
+
+        function submitFormWithToken(params) {
+          // params.token.id, params.email are passed
+
+          // remove old values if any
+          jQuery('input[name=payfortToken], input[name=payfortEmail]').remove();
+
+          // Append the params to the form
+          frmCheckout = jQuery("form#co-payment-form");
+          frmCheckout.append("<input type='hidden' name='payfortToken' value='" + params.token.id + "'>");
+          frmCheckout.append("<input type='hidden' name='payfortEmail' value='" + params.email + "'>");
+
+          // Set text for entered card
+          jQuery('#payfortCardDetails').show().html("<p>Pay with Card: xxxx-xxxx-xxxx-<b>" + params.token.card.last4 + "</b></p>");
+
+          //hide button
+          jQuery('#btnCheckout').hide();
+
+          // show link to change card details
+          jQuery('#changeCardBtn').show();
+        }
+
+        jQuery(document).on('click','#btnCheckout,#changeCardBtn', function(event) {
+            event.preventDefault();
+            StartCheckout.open({
+              amount: quoteBaseGrandTotal*100, // e.g. 100 = $1.00
+              currency: "<?php
+                $quote = Mage::getSingleton('checkout/session')->getQuote();
+                echo $quote->getOrderCurrencyCode()
+              ?>", // supports USD, AED only for now
+              email: "<?php echo $quote->getBillingAddress()->getEmail();?>" // should be a customer email from order info
+            });
+          });
+
+</script>
+<div class="form-list" id="payment_form_<?php echo $this->getMethodCode() ?>" style="display:none;">
+  <div>
+      <button id="btnCheckout" class='button' >Place Order</button>
+      <div id='payfortCardDetails'></div>
+      <a id="changeCardBtn"  href="#_" style="display:none">Change Card Details</a>
+  </div>
+</div>
+<div>
+    <?php echo $this->getMethod()->getConfigData('message');?>
+</div>

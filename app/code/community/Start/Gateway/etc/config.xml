@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+    <Start_Gateway>
+      <version>1.0.0.0</version>
+    </Start_Gateway>
+  </modules>
+
+  <global>
+    <fieldsets>
+      <sales_convert_quote_payment>
+      </sales_convert_quote_payment>
+    </fieldsets>
+
+    <helpers>
+      <gateway>
+        <class>Start_Gateway_Helper</class>
+      </gateway>
+    </helpers>
+
+    <blocks>
+      <gateway>
+        <class>Start_Gateway_Block</class>
+      </gateway>
+    </blocks>
+
+    <models>
+      <gateway>
+        <class>Start_Gateway_Model</class>
+      </gateway>
+    </models>
+
+    <resources>
+      <gateway_setup>
+        <setup>
+          <module>Start_Gateway</module>
+        </setup>
+      </gateway_setup>
+    </resources>
+  </global>
+
+  <default>
+    <payment>
+      <gateway>
+        <active>1</active>
+        <model>gateway/paymentmethod</model>
+        <order_status>pending</order_status>
+        <title>Credit / Debit Card</title>
+        <allowspecific>0</allowspecific>
+        <payment_action>sale</payment_action>
+      </gateway>
+    </payment>
+  </default>
+
+  <frontend>
+    <routers>
+      <gateway>
+        <use>standard</use>
+        <args>
+          <module>Start_Gateway</module>
+          <frontName>gateway</frontName>
+        </args>
+      </gateway>
+    </routers>
+  </frontend>
+</config>
