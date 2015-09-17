@@ -8,8 +8,7 @@
         if(StartCheckout){
             StartCheckout.config({
                 key: key,
-                label: 'Enter Your Card Details',
-                form_label: 'Add Card',
+                formLabel: 'Ok',
                 complete: function(params) {
                   submitFormWithToken(params); // params.token.id, params.email
                 }
@@ -52,7 +51,7 @@
 </script>
 <div class="form-list" id="payment_form_<?php echo $this->getMethodCode() ?>" style="display:none;">
   <div>
-      <button id="btnCheckout" class='button' >Place Order</button>
+      <button id="btnCheckout" class='button' >Enter Card Details</button>
       <div id='payfortCardDetails'></div>
       <a id="changeCardBtn"  href="#_" style="display:none">Change Card Details</a>
   </div>
