@@ -78,7 +78,7 @@ class Start_Gateway_Model_Paymentmethod extends Mage_Payment_Model_Method_Abstra
 
   public function collectPayment(\Mage_Payment_Model_Info $payment, $amount, $capture=true) {
 
-      require_once(MAGENTO_ROOT.'/vendor/autoload.php'); # At the top of your PHP file
+      require_once(MAGENTO_ROOT.'/lib/Start/autoload.php'); # At the top of your PHP file
 
         $token = isset($_POST['payfortToken'])?$_POST['payfortToken']:false;
         $email = isset($_POST['payfortEmail'])?$_POST['payfortEmail']:false;
