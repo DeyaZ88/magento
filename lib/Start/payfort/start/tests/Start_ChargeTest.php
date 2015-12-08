@@ -2,56 +2,82 @@
 
 class Start_ChargeTest extends \PHPUnit_Framework_TestCase
 {
-
-  function setUp()
-  {
-    Start::setApiKey('test_sec_k_2b99b969196bece8fa7fd');
-  }
-
-  function testList()
-  {
-    $result = Start_Charge::all();
-    //No assertion. If there is an error, an exception is thrown. Otherwise it was ok.
-  }
-
-  function testCreateSuccess()
-  {
-    $data = array(
-      "amount" => 1050,
-      "currency" => "usd",
-      "email" => "ahmed@example.com",
-      "card" => array(
+    protected $cardForSuccess = array(
         "number" => "4242424242424242",
         "exp_month" => 11,
-        "exp_year" => 2016,
+        "exp_year" => 2020,
         "cvc" => "123"
-      ),
-      "description" => "Charge for test@example.com"
     );
 
-    $result = Start_Charge::create($data);
-
-    $expected = array(
-      "id" => "ch_3c513b0dfdc110b11b4091e2cbf6dc23",
-      "amount" => "1050",
-      "currency" => "usd",
-      "description" => "Charge for test@example.com",
-      "state" => "captured",
-      "email" => "ahmed@example.com",
-      "ip" => "",
-      "statement_descriptor" => "",
-      "account_id" => "acc_xxx",
-      "captured_amount" => 1050,
-      "refunded_amount" => 0,
-      "failure_reason" => "",
-      "failure_code" => "",
-      "created_at" => "2014-08-14T16:20:53.451+03:00",
-      "updated_at" => "2014-08-14T16:20:53.451+03:00",
-      "object" => "charge",
-      "card" => array()
+    protected $cardForFailure = array(
+        "number" => "4000000000000002",
+        "exp_month" => 11,
+        "exp_year" => 2020,
+        "cvc" => "123"
     );
 
-    $this->assertEquals(sort(array_keys($expected)), sort(array_keys($result)));
-    $this->assertNull($result['failure_code']);
-  }
+    function setUp()
+    {
+        Start::setApiKey('test_sec_k_2b99b969196bece8fa7fd');
+    }
+
+    function testList()
+    {
+        $result = Start_Charge::all();
+        //No assertion. If there is an error, an exception is thrown. Otherwise it was ok.
+    }
+
+    function testCreateSuccess()
+    {
+        $data = array(
+            "amount" => 1050,
+            "currency" => "usd",
+            "email" => "ahmed@example.com",
+            "card" => $this->cardForSuccess,
+            "description" => "Charge for test@example.com"
+        );
+
+        $result = Start_Charge::create($data);
+
+        $this->assertEquals($result["state"], "captured");
+    }
+
+    function testCreateFailure()
+    {
+        $data = array(
+            "amount" => 1050,
+            "currency" => "usd",
+            "email" => "ahmed@example.com",
+            "card" => $this->cardForFailure,
+            "description" => "Charge for test@example.com"
+        );
+        try {
+            $result = Start_Charge::create($data);
+        } catch (Start_Error_Banking $e) {
+            $this->assertSame('card_declined', $e->getErrorCode());
+            $this->assertSame('Charge was declined.', $e->getMessage());
+        }
+    }
+
+    function testMetadata()
+    {
+        $data = array(
+            "amount" => 1050,
+            "currency" => "usd",
+            "email" => "ahmed@example.com",
+            "card" => $this->cardForSuccess,
+            "description" => "Charge for test@example.com",
+            "metadata" => array(
+                "reference_id" => "1234567890",
+                "tag" => "new"
+            )
+        );
+
+        $result = Start_Charge::create($data);
+
+        $this->assertEquals($result["metadata"], array(
+            "reference_id" => "1234567890",
+            "tag" => "new"
+        ));
+    }
 }
