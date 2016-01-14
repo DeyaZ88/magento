@@ -14,13 +14,21 @@ class Start
   * Client version
   * @var string
   */
-  const VERSION = '0.0.5';
+  const VERSION = '0.0.8';
 
   /**
   * Current API key
   * @var string
   */
   protected static $apiKey;
+  
+  /**
+  * ShoppingCart name and version
+  * Our plugin version
+  * “WooCommerce 4.2.2 / Start Plugin 0.1.2”
+  * @var string
+  */
+  protected static $userAgent = "";
 
   /**
   * API Server URL
@@ -44,11 +52,7 @@ class Start
   * Path to the CA Certificates required when making CURL calls
   */
   public static function getCaPath() {
-    return realpath(dirname(__FILE__)) . '\data\ca-certificates.crt';
-  }
-
-  public static function getPemPath() {
-    return realpath(dirname(__FILE__)) . '\data\cacert.pem';
+    return realpath(dirname(__FILE__)) . '/data/ca-certificates.crt';
   }
 
   /**
@@ -69,6 +73,25 @@ class Start
   public static function getApiKey()
   {
     return self::$apiKey;
+  }
+  /**
+  * sets API Key
+  *
+  * @param string $userAgent UserAgent
+  */
+  public static function setUserAgent($userAgent)
+  {
+    self::$userAgent = $userAgent;
+  }
+
+  /**
+  * returns current set UserAgent
+  *
+  * @return string UserAgent
+  */
+  public static function getUserAgent()
+  {
+    return self::$userAgent;
   }
 
   /**

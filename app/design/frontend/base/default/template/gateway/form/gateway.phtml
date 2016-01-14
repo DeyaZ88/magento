@@ -1,61 +1,71 @@
+<?php
+if (file_exists(MAGENTO_ROOT . '/data/currencies.json')) {
+    $currency_json_data = json_decode(file_get_contents(MAGENTO_ROOT . '/data/currencies.json'), 1);
+    $currency_multiplier = floatval($currency_json_data[Mage::app()->getStore()->getCurrentCurrencyCode()]);
+} else {
+    $currency_multiplier = floatval(100);
+}
+?>
 <script>
+    var currency_multiplier = '<?php echo $currency_multiplier; ?>';
     var key = '<?php
-        if($this->getMethod()->getConfigData('test_mode'))
-            echo $this->getMethod()->getConfigData('test_open_key');
-        else
-            echo $this->getMethod()->getConfigData('live_open_key');
-    ?>';
-        if(StartCheckout){
-            StartCheckout.config({
-                key: key,
-                formLabel: 'Ok',
-                complete: function(params) {
-                  submitFormWithToken(params); // params.token.id, params.email
-                }
-            });
-        }
+if ($this->getMethod()->getConfigData('test_mode'))
+    echo $this->getMethod()->getConfigData('test_open_key');
+else
+    echo $this->getMethod()->getConfigData('live_open_key');
+?>';
+    if (StartCheckout) {
+        StartCheckout.config({
+            key: key,
+            formLabel: 'Ok',
+            complete: function (params) {
+                submitFormWithToken(params); // params.token.id, params.email
+            }
+        });
+    }
 
-        function submitFormWithToken(params) {
-          // params.token.id, params.email are passed
+    function submitFormWithToken(params) {
+        // params.token.id, params.email are passed
 
-          // remove old values if any
-          jQuery('input[name=payfortToken], input[name=payfortEmail]').remove();
+        // remove old values if any
+        jQuery('input[name=payfortToken], input[name=payfortEmail]').remove();
 
-          // Append the params to the form
-          frmCheckout = jQuery("form#co-payment-form");
-          frmCheckout.append("<input type='hidden' name='payfortToken' value='" + params.token.id + "'>");
-          frmCheckout.append("<input type='hidden' name='payfortEmail' value='" + params.email + "'>");
+        // Append the params to the form
+        frmCheckout = jQuery("form#co-payment-form");
+        frmCheckout.append("<input type='hidden' name='payfortToken' value='" + params.token.id + "'>");
+        frmCheckout.append("<input type='hidden' name='payfortEmail' value='" + params.email + "'>");
 
-          // Set text for entered card
-          jQuery('#payfortCardDetails').show().html("<p>Pay with Card: xxxx-xxxx-xxxx-<b>" + params.token.card.last4 + "</b></p>");
+        // Set text for entered card
+        jQuery('#payfortCardDetails').show().html("<p>Pay with Card: xxxx-xxxx-xxxx-<b>" + params.token.card.last4 + "</b></p>");
 
-          //hide button
-          jQuery('#btnCheckout').hide();
+        //hide button
+        jQuery('#btnCheckout').hide();
 
-          // show link to change card details
-          jQuery('#changeCardBtn').show();
-        }
+        // show link to change card details
+        jQuery('#changeCardBtn').show();
+    }
 
-        jQuery(document).on('click','#btnCheckout,#changeCardBtn', function(event) {
-            event.preventDefault();
-            StartCheckout.open({
-              amount: quoteBaseGrandTotal*100, // e.g. 100 = $1.00
-              currency: "<?php
-                $quote = Mage::getSingleton('checkout/session')->getQuote();
-                echo $quote->getOrderCurrencyCode()
-              ?>", // supports USD, AED only for now
-              email: "<?php echo $quote->getBillingAddress()->getEmail();?>" // should be a customer email from order info
-            });
-          });
+    jQuery(document).on('click', '#btnCheckout,#changeCardBtn', function (event) {
+        event.preventDefault();
+        var currency = '<?php
+$quote = Mage::getSingleton('checkout/session')->getQuote();
+echo Mage::app()->getStore()->getCurrentCurrencyCode();
+?>';
+        StartCheckout.open({
+            amount: quoteBaseGrandTotal * currency_multiplier, // e.g. 100 = $1.00
+            currency: currency,
+            email: "<?php echo $quote->getBillingAddress()->getEmail(); ?>" // should be a customer email from order info
+        });
+    });
 
 </script>
 <div class="form-list" id="payment_form_<?php echo $this->getMethodCode() ?>" style="display:none;">
-  <div>
-      <button id="btnCheckout" class='button' >Enter Card Details</button>
-      <div id='payfortCardDetails'></div>
-      <a id="changeCardBtn"  href="#_" style="display:none">Change Card Details</a>
-  </div>
+    <div>
+        <button id="btnCheckout" class='button' >Enter Card Details</button>
+        <div id='payfortCardDetails'></div>
+        <a id="changeCardBtn"  href="#_" style="display:none">Change Card Details</a>
+    </div>
 </div>
 <div>
-    <?php echo $this->getMethod()->getConfigData('message');?>
+<?php echo $this->getMethod()->getConfigData('message'); ?>
 </div>
