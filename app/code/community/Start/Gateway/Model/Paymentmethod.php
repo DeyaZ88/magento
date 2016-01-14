@@ -118,19 +118,19 @@ class Start_Gateway_Model_Paymentmethod extends Mage_Payment_Model_Method_Abstra
         }
         $billing_data = $order->getBillingAddress()->getData();
         if (is_object($order->getShippingAddress())) {
-            $shiping_data = $order->getShippingAddress()->getData();
+            $shipping_address = array(
+                "first_name" => $shiping_data['firstname'],
+                "last_name" => $shiping_data['lastname'],
+                "country" => $shiping_data['country_id'],
+                "city" => $shiping_data['city'],
+                "address" => $shiping_data['customer_address'],
+                "phone" => $shiping_data['telephone'],
+                "postcode" => $shiping_data['postcode']
+            );
         } else {
-            $shiping_data = $billing_data;
+            $shipping_address = array();
         }
-        $shipping_address = array(
-            "first_name" => $shiping_data['firstname'],
-            "last_name" => $shiping_data['lastname'],
-            "country" => $shiping_data['country_id'],
-            "city" => $shiping_data['city'],
-            "address" => $shiping_data['customer_address'],
-            "phone" => $shiping_data['telephone'],
-            "postcode" => $shiping_data['postcode']
-        );
+
         $billing_address = array(
             "first_name" => $billing_data['firstname'],
             "last_name" => $billing_data['lastname'],
