@@ -116,7 +116,12 @@ class Start_Gateway_Model_Paymentmethod extends Mage_Payment_Model_Method_Abstra
             $username = "Guest";
             $registered_at = date(DATE_ISO8601, strtotime(date("Y-m-d H:i:s")));
         }
-        $shiping_data = $order->getShippingAddress()->getData();
+        $billing_data = $order->getBillingAddress()->getData();
+        if (is_object($order->getShippingAddress())) {
+            $shiping_data = $order->getShippingAddress()->getData();
+        } else {
+            $shiping_data = $billing_data;
+        }
         $shipping_address = array(
             "first_name" => $shiping_data['firstname'],
             "last_name" => $shiping_data['lastname'],
@@ -126,7 +131,6 @@ class Start_Gateway_Model_Paymentmethod extends Mage_Payment_Model_Method_Abstra
             "phone" => $shiping_data['telephone'],
             "postcode" => $shiping_data['postcode']
         );
-        $billing_data = $order->getBillingAddress()->getData();
         $billing_address = array(
             "first_name" => $billing_data['firstname'],
             "last_name" => $billing_data['lastname'],
@@ -159,16 +163,16 @@ class Start_Gateway_Model_Paymentmethod extends Mage_Payment_Model_Method_Abstra
         );
 
         $ver = new Mage;
-        $version=$ver->getVersion();
+        $version = $ver->getVersion();
         $userAgent = 'Magento ' . $version . ' / Start Plugin ' . self::PLUGIN_VERSION;
         Start::setUserAgent($userAgent);
-        
+
         $method = $payment->getMethodInstance();
         if ($method->getConfigData('test_mode') == 1)
             Start::setApiKey($method->getConfigData('test_secret_key'));
         else
             Start::setApiKey($method->getConfigData('live_secret_key'));
-        
+
         try {
             // Charge the token
             $charge = Start_Charge::create($charge_args);
