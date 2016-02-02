@@ -31,7 +31,7 @@ else
         jQuery('input[name=payfortToken], input[name=payfortEmail]').remove();
 
         // Append the params to the form
-        frmCheckout = jQuery("form#co-payment-form");
+        frmCheckout = jQuery("form#co-payment-form, form#onestepcheckout-form");
         frmCheckout.append("<input type='hidden' name='payfortToken' value='" + params.token.id + "'>");
         frmCheckout.append("<input type='hidden' name='payfortEmail' value='" + params.email + "'>");
 
@@ -51,6 +51,11 @@ else
 $quote = Mage::getSingleton('checkout/session')->getQuote();
 echo Mage::app()->getStore()->getCurrentCurrencyCode();
 ?>';
+
+        if (typeof quoteBaseGrandTotal === "undefined") {
+            var quoteBaseGrandTotal = <?php echo (float)$this->getQuoteBaseGrandTotal(); ?>;
+        }
+
         StartCheckout.open({
             amount: quoteBaseGrandTotal * currency_multiplier, // e.g. 100 = $1.00
             currency: currency,
