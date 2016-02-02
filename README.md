@@ -4,6 +4,8 @@ Payfort Start makes it easy (and free) to accept credit cards in the Middle East
 
 Payfort is the only payment solution you need to start accepting online payments in the Middle East. That's right, no merchant accounts, no payment gateways and no visits to the bank. Get started online, and in under 5 minutes. (*Currently exclusively available to companies in the Middle East*)
 
+You can find full installation guide here: https://docs.start.payfort.com/guides/magento/
+
 
 # Using Magento?
 
@@ -11,7 +13,7 @@ Then you're going to love this!
 
 This plugin makes integrating your store with Payfort a walk in the park! In the same time it would take you to make a cup of some great turkish coffee, you could be up and running with online payments!
 
-Please copy and paste whole contents of this extension to magento root folder or install package directly (https://github.com/payfort/magento/raw/master/package/Start_Gateway-0.1.1.tgz).
+Please copy and paste whole contents of this extension to magento root folder.
 
 Enable Start Gateway in magento/admin/System/Configuration/Advanced/Advanced.
 
