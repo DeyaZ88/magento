@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "5f0451476ec12a9a5dda4f9cb2f43064",
-    "content-hash": "b379f6d4653293e1f021310a2766a6d6",
+    "hash": "dd6dae7add5fea15a3c1a60b68f447dd",
+    "content-hash": "693db0fc97c0433fd25d4df111ca4d22",
     "packages": [
         {
             "name": "payfort/start",
