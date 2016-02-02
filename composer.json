@@ -1,5 +1,8 @@
 {
-    "name": "alovak/magento-plugin",
+    "name": "payfort/magento-plugin",
+    "config": {
+        "vendor-dir": "lib/Start"
+    },
     "require": {
         "payfort/start": "^0.1.0"
     },

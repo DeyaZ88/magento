@@ -4,6 +4,11 @@ class Start_CustomerTest extends \PHPUnit_Framework_TestCase
   function setUp()
   {
     Start::setApiKey('test_sec_k_2b99b969196bece8fa7fd');
+    Start::$fallback = false;
+
+    if (getenv("CURL") == "1") {
+        Start::$useCurl = true;
+    }
     // Data for a successful customer
     $this->success_data = array(
       "name" => "Test Customer",

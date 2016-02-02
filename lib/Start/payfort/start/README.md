@@ -1,6 +1,9 @@
+[![Build Status](https://travis-ci.org/payfort/start-php.svg?branch=master)](https://travis-ci.org/payfort/start-php)
+
 # Start PHP
 
 Start makes accepting payments in the Middle East ridiculously easy. Sign up for an account at [https://start.payfort.com](https://start.payfort.com).
+
 
 ## Getting Started
 
@@ -23,6 +26,8 @@ php composer.phar require payfort/start
 ```
 
 Now, running `php composer.phar install` will pull the library directly to your local `vendor` folder.
+
+**Note for Windows:** Before you start development with start-php, please check that your php_curl can work with our ssl certificate (TLSv1.2). You can do this by running unit tests. If you see "SSL connection error" it means that you need to install a new php version (at least 5.5.19).
 
 **Note:** If you're running on a shared host, then you may need to set the `allow_url_fopen` flag for the `php` commands. For the install command, for example, this would look like `php -d allow_url_fopen=On composer.phar install`. The `-d` overrides the `php.ini` settings, where `allow_url_fopen` is usually set to `Off`.
 
@@ -111,3 +116,5 @@ php vendor/bin/phpunit tests --bootstrap vendor/autoload.php
 ## Contributing
 
 Read our [Contributing Guidelines](CONTRIBUTING.md) for details
+
+Copyright (c) Payfort.
