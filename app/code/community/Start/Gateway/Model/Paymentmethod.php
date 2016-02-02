@@ -17,7 +17,7 @@ class Start_Gateway_Model_Paymentmethod extends Mage_Payment_Model_Method_Abstra
     const REQUEST_TYPE_AUTH_ONLY = 'AUTH_ONLY';
     const REQUEST_TYPE_CAPTURE_ONLY = 'CAPTURE_ONLY';
     const REQUEST_TYPE_PRIOR_AUTH_CAPTURE = 'PRIOR_AUTH_CAPTURE';
-    const PLUGIN_VERSION = '0.2';
+    const PLUGIN_VERSION = '0.2.4';
 
     /**
      * Availability options
