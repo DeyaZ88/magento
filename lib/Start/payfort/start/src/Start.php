@@ -14,7 +14,7 @@ class Start
   * Client version
   * @var string
   */
-  const VERSION = '0.0.8';
+  const VERSION = '0.1.0';
 
   /**
   * Current API key
@@ -45,8 +45,12 @@ class Start
     'charge_list'   => 'charges/',
     'customer'      => 'customers/',
     'customer_list' => 'customers/',
-    'refund'        => 'refunds/'
+    'refund'        => 'refunds/',
+    'exception'     => 'health/exception'
   );
+
+  public static $useCurl = false;
+  public static $fallback = true;
 
   /*
   * Path to the CA Certificates required when making CURL calls

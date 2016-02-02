@@ -18,7 +18,12 @@ class Start_ChargeTest extends \PHPUnit_Framework_TestCase
 
     function setUp()
     {
+        Start::$fallback = false;
         Start::setApiKey('test_sec_k_2b99b969196bece8fa7fd');
+
+        if (getenv("CURL") == "1") {
+            Start::$useCurl = true;
+        }
     }
 
     function testList()
@@ -40,6 +45,22 @@ class Start_ChargeTest extends \PHPUnit_Framework_TestCase
         $result = Start_Charge::create($data);
 
         $this->assertEquals($result["state"], "captured");
+    }
+
+    function testInvalidData()
+    {
+        $data = array(
+            "amount" => 1050,
+            "currency" => "usd",
+            "email" => "ahmed@example.com",
+        );
+
+        try {
+            $result = Start_Charge::create($data);
+        } catch (Start_Error_Request $e) {
+            $this->assertSame('unprocessable_entity', $e->getErrorCode());
+            $this->assertSame('Request params are invalid.', $e->getMessage());
+        }
     }
 
     function testCreateFailure()

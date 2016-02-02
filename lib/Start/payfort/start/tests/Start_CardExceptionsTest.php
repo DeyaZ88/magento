@@ -6,6 +6,11 @@ class Start_CardExceptionsTest extends \PHPUnit_Framework_TestCase
   function setUp()
   {
     Start::setApiKey('test_sec_k_2b99b969196bece8fa7fd');
+    Start::$fallback = false;
+
+    if (getenv("CURL") == "1") {
+        Start::$useCurl = true;
+    }
   }
 
   function testCardDeclined()
