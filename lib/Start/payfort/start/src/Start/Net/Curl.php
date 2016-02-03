@@ -54,6 +54,3 @@ class Start_Net_Curl {
         return $result;
     }
 }
-?>
-
-

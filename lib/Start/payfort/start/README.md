@@ -9,6 +9,8 @@ Start makes accepting payments in the Middle East ridiculously easy. Sign up for
 
 Using Start with your PHP project is simple.
 
+
+### Install via Composer
 If you're using [Composer](https://getcomposer.org/doc/00-intro.md#installation-nix) (and really, who isn't these days amirite?), you can simply run:
 
 ```bash
@@ -26,6 +28,20 @@ php composer.phar require payfort/start
 ```
 
 Now, running `php composer.phar install` will pull the library directly to your local `vendor` folder.
+
+### Install Manually
+
+Get source code of the latest release from github repository: https://github.com/payfort/start-php/releases/latest and copy it to your project.
+
+Inside your php file add this:
+
+```
+<?php
+
+require_once("path-to-start-php/Start.php");
+
+?>
+```
 
 **Note for Windows:** Before you start development with start-php, please check that your php_curl can work with our ssl certificate (TLSv1.2). You can do this by running unit tests. If you see "SSL connection error" it means that you need to install a new php version (at least 5.5.19).
 
