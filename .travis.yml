@@ -1,0 +1,14 @@
+sudo: required
+services:
+- docker
+before_install:
+- docker pull payfortstart/magento-test
+- docker build -t magento-plugin .
+- docker run --name app -d woocommerce-plugin
+- docker ps -a
+script:
+- docker run --link app:app payfortstart/woocommerce-test /bin/sh -c "xvfb-run -a  bundle exec rspec"
+notifications:
+  slack:
+    secure: o5VvRziKibSbwCtVxEYIDVgOLcXY4ayCAS6H7tUsI+QaLv3dYoOdyfJMOq92UvcZeIiaZ0I2SnoJrMMtWgYStzz24PalKDe5bqeluwoXAR7hE3j43ePsV7LvsB4tKn8WS1kHWVzpqTFklEICe9BLRNWYm/gJZ2MB/uSqKvw/JUauSEiO+W/kJE9bkBYW/15ByUjQQlb7BJPc4uHAMVINGXNuWax7PJq9lciYupbSkPffNPVUaFvFrMbUjDs09XFWEmry/apVpb5+oO2P7wtilXC5KndJlT2hP5+KCcKQVdSD9FwKzmTFOXwGpAsZkauIxxld2n++Fr1IN1WARrlvCAzAB82KbkajHdSMCX/V8vc90WuGyldcZMEIxle62n0XFdwb5/kQx59tVUyVVaIVZ/l1rObyomxbofgmHynoPHp8CCzh6mdVWzlH/+Vl9UxvMdU2Fq1nC2hon1n3lFASp5k1BB8c9qvlN8FOkhOkJfq4zgdeU0kUhwZE0obV79RhB03fMI7Kg8CeYLTuCdGWnHcmlXtTjBxDTWJbpiNG9KDXn72h+6Vs0sqtfDa9J46AFgNNqXpqDK0oEl8XVFGYiyavHiP2aLr1fFI/pkPvvDEY7GRGd5EuDQz9OSzsJ/eYd9TGcicwQ75ldv7xF2DK5uzt5xD9w+sW5AH1yA9DTn4=
+
