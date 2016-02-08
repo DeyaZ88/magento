@@ -4,10 +4,10 @@ services:
 before_install:
 - docker pull payfortstart/magento-test
 - docker build -t magento-plugin .
-- docker run --name app -d woocommerce-plugin
+- docker run --name app -d magento-plugin
 - docker ps -a
 script:
-- docker run --link app:app payfortstart/woocommerce-test /bin/sh -c "xvfb-run -a  bundle
+- docker run --link app:app payfortstart/magento-test /bin/sh -c "xvfb-run -a  bundle
   exec rspec"
 notifications:
   slack:
