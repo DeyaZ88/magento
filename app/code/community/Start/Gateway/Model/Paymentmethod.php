@@ -178,6 +178,12 @@ class Start_Gateway_Model_Paymentmethod extends Mage_Payment_Model_Method_Abstra
             // Charge the token
             $charge = Start_Charge::create($charge_args);
             //need to process charge as success or failed
+            $payment->setTransactionId($charge["id"]);
+            if ($capture) {
+                $payment->setIsTransactionClosed(1);
+            } else {
+                $payment->setIsTransactionClosed(0);
+            }
         } catch (Start_Error $e) {
             $error_code = $e->getErrorCode();
 
@@ -284,14 +290,16 @@ class Start_Gateway_Model_Paymentmethod extends Mage_Payment_Model_Method_Abstra
 
                 $order = $payment->getOrder();
                 $order->setCanSendNewEmailFlag(false);
+
                 $payment->authorize(true, $order->getBaseTotalDue()); // base amount will be set inside
                 $payment->setAmountAuthorized($order->getTotalDue());
 
-                $order->setState(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT, 'pending_payment', '', false);
+                // this code should be verified and updated...
+                /* $order->setState(Mage_Sales_Model_Order::STATE_COMPLETE, true); */
 
-                $stateObject->setState(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT);
-                $stateObject->setStatus('pending_payment');
-                $stateObject->setIsNotified(false);
+                /* $stateObject->setState(Mage_Sales_Model_Order::STATE_COMPLETE); */
+                /* $stateObject->setStatus('complete'); */
+                /* $stateObject->setIsNotified(false); */
                 break;
             default:
                 break;
