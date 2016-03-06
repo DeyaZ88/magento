@@ -32,7 +32,6 @@ else
 
         // Append the params to the form
         frmCheckout = jQuery("#p_method_gateway");
-//        frmCheckout = jQuery("form#co-payment-form, form#onestepcheckout-form");
         frmCheckout.append("<input type='hidden' name='payfortToken' value='" + params.token.id + "'>");
         frmCheckout.append("<input type='hidden' name='payfortEmail' value='" + params.email + "'>");
 
