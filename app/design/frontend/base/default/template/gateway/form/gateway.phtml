@@ -32,6 +32,7 @@ else
 
         // Append the params to the form
         frmCheckout = jQuery("#p_method_gateway");
+//        frmCheckout = jQuery("form#co-payment-form, form#onestepcheckout-form");
         frmCheckout.append("<input type='hidden' name='payfortToken' value='" + params.token.id + "'>");
         frmCheckout.append("<input type='hidden' name='payfortEmail' value='" + params.email + "'>");
 
@@ -43,18 +44,19 @@ else
 
         // show link to change card details
         jQuery('#changeCardBtn').show();
+        payment.save();
     }
 
-    jQuery(document).on('click', '#btnCheckout,#changeCardBtn', function (event) {
+    jQuery(document).on('click', '#changeCardBtn', function (event) {
         event.preventDefault();
         openPaymentPopup();
     });
 
     function openPaymentPopup() {
         var currency = '<?php
-$quote = Mage::getSingleton('checkout/session')->getQuote();
-echo Mage::app()->getStore()->getCurrentCurrencyCode();
-?>';
+        $quote = Mage::getSingleton('checkout/session')->getQuote();
+        echo Mage::app()->getStore()->getCurrentCurrencyCode();
+        ?>';
 
         if (typeof quoteBaseGrandTotal === "undefined") {
             var quoteBaseGrandTotal = <?php echo (float) $this->getQuoteBaseGrandTotal(); ?>;
@@ -86,7 +88,6 @@ echo Mage::app()->getStore()->getCurrentCurrencyCode();
 </script>
 <div class="form-list" id="payment_form_<?php echo $this->getMethodCode() ?>" style="display:none;">
     <div>
-        <button id="btnCheckout" class='button' >Enter Card Details</button>
         <div id='payfortCardDetails'></div>
         <a id="changeCardBtn"  href="#_" style="display:none">Change Card Details</a>
     </div>
