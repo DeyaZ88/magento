@@ -193,7 +193,7 @@ class Start_Gateway_Model_Paymentmethod extends Mage_Payment_Model_Method_Abstra
                 $errorMsg = $e->getMessage();
             }
 
-            Mage::throwException($errorMsg);
+ 	throw new Mage_Payment_Model_Info_Exception($errorMsg);
         }
         //need to process charge as success or failed
     }
