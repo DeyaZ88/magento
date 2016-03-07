@@ -188,7 +188,7 @@ class Start_Gateway_Model_Paymentmethod extends Mage_Payment_Model_Method_Abstra
             $error_code = $e->getErrorCode();
 
             if ($error_code === "card_declined") {
-                $errorMsg = $e->getMessage() . ' Please, return to "Payment Information" step and try with another card.';
+                $errorMsg = 'Charge was declined. Please, contact you bank for more information or use a different card.';
             } else {
                 $errorMsg = $e->getMessage();
             }
