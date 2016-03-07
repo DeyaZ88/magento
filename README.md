@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/payfort/magento.svg?branch=master)](https://travis-ci.org/payfort/magento)
+
 # Payfort Start Magento Plugin
 
 Payfort Start makes it easy (and free) to accept credit cards in the Middle East.
