@@ -73,7 +73,7 @@ class Start_Gateway_Model_Paymentmethod extends Mage_Payment_Model_Method_Abstra
     }
 
     public function collectPayment(\Mage_Payment_Model_Info $payment, $amount, $capture = true) {
-
+	$baseCurrencyCode = Mage::app()->getStore()->getBaseCurrencyCode(); 
         require_once(MAGENTO_ROOT . '/lib/Start/autoload.php'); # At the top of your PHP file
 
         $token = isset($_POST['payfortToken']) ? $_POST['payfortToken'] : false;
@@ -88,9 +88,7 @@ class Start_Gateway_Model_Paymentmethod extends Mage_Payment_Model_Method_Abstra
         if (!$token || !$email) {
             Mage::throwException('Invalid Token');
         }
-        $store = Mage::app()->getStore();
-        $currency = $store->getCurrentCurrency();
-        $currency = !isset($currency) ? 'AED' : $currency->getCurrencyCode();
+        $currency = !isset($baseCurrencyCode) ? 'AED' : $baseCurrencyCode;
         if (file_exists(MAGENTO_ROOT . '/data/currencies.json')) {
             $currency_json_data = json_decode(file_get_contents(MAGENTO_ROOT . '/data/currencies.json'), 1);
             $currency_multiplier = $currency_json_data[$currency];
