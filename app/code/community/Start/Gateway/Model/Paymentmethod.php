@@ -73,7 +73,7 @@ class Start_Gateway_Model_Paymentmethod extends Mage_Payment_Model_Method_Abstra
     }
 
     public function collectPayment(\Mage_Payment_Model_Info $payment, $amount, $capture = true) {
-	$currency = Mage::app()->getStore()->get$Currency(); 
+	$currency = Mage::app()->getStore()->getBaseCurrencyCode();
         require_once(MAGENTO_ROOT . '/lib/Start/autoload.php'); # At the top of your PHP file
 
         $token = isset($_POST['payfortToken']) ? $_POST['payfortToken'] : false;
