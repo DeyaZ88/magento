@@ -54,11 +54,11 @@ else
     function openPaymentPopup() {
         var currency = '<?php
         $quote = Mage::getSingleton('checkout/session')->getQuote();
-        echo Mage::app()->getStore()->getCurrentCurrencyCode();
+        echo Mage::app()->getStore()->getBaseCurrencyCode();
         ?>';
 
         if (typeof quoteBaseGrandTotal === "undefined") {
-            var quoteBaseGrandTotal = <?php echo (float) $this->getQuoteBaseGrandTotal(); ?>;
+            var quoteBaseGrandTotal = <?php echo (float) $this->getBaseGrandTotal(); ?>;
         }
 
         StartCheckout.open({
