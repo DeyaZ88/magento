@@ -18,6 +18,7 @@ else
         StartCheckout.config({
             key: key,
             formLabel: 'Ok',
+            tabOnMobile: true,
             complete: function (params) {
                 submitFormWithToken(params); // params.token.id, params.email
             }
