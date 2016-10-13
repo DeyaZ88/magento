@@ -7,7 +7,6 @@ if (file_exists(MAGENTO_ROOT . '/data/currencies.json')) {
 }
 ?>
 <script>
-    var currency_multiplier = '<?php echo $currency_multiplier; ?>';
     var key = '<?php
 if ($this->getMethod()->getConfigData('test_mode'))
     echo $this->getMethod()->getConfigData('test_open_key');
@@ -63,7 +62,7 @@ else
         }
 
         StartCheckout.open({
-            amount: quoteBaseGrandTotal * currency_multiplier, // e.g. 100 = $1.00
+            amount: quoteBaseGrandTotal * <?php echo $currency_multiplier; ?>, // e.g. 100 = $1.00
             currency: currency,
             email: "<?php echo $quote->getBillingAddress()->getEmail(); ?>" // should be a customer email from order info
         });
