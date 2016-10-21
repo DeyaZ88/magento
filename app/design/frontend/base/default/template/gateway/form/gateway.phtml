@@ -1,19 +1,36 @@
 <?php
+
 if (file_exists(MAGENTO_ROOT . '/data/currencies.json')) {
     $currency_json_data = json_decode(file_get_contents(MAGENTO_ROOT . '/data/currencies.json'), 1);
-    $currency_multiplier = floatval($currency_json_data[Mage::app()->getStore()->getCurrentCurrencyCode()]);
+    $checkoutData['currency_multiplier'] = floatval($currency_json_data[Mage::app()->getStore()->getCurrentCurrencyCode()]);
 } else {
-    $currency_multiplier = floatval(100);
+    $checkoutData['currency_multiplier'] = floatval(100);
 }
+
+if ( $this->getMethod()->getConfigData('test_mode') ){
+    $checkoutData['key'] = $this->getMethod()->getConfigData('test_open_key');
+}
+else{
+    $checkoutData['key'] = $this->getMethod()->getConfigData('live_open_key');
+}
+
+$quote = Mage::getSingleton('checkout/session')->getQuote();
+
+$checkoutData['currency'] = Mage::app()->getStore()->getBaseCurrencyCode();
+$checkoutData['grandTotal'] = (float) $this->getBaseGrandTotal();
+$checkoutData['email'] = $quote->getBillingAddress()->getEmail();
+$checkoutData['message'] = $this->getMethod()->getConfigData('message');
+
+print "<pre>";
+print_r($checkoutData);
+print "</pre>";
+
 ?>
 <script>
-    var currency_multiplier = '<?php echo $currency_multiplier; ?>';
-    var key = '<?php
-if ($this->getMethod()->getConfigData('test_mode'))
-    echo $this->getMethod()->getConfigData('test_open_key');
-else
-    echo $this->getMethod()->getConfigData('live_open_key');
-?>';
+    var currency_multiplier = <?php echo "'" . $checkoutData['currency_multiplier'] . "';"; ?>
+
+    var key = <?php echo "'" . $checkoutData['key'] . "';"; ?>
+    
     if (StartCheckout) {
         StartCheckout.config({
             key: key,
@@ -53,21 +70,22 @@ else
     });
 
     function openPaymentPopup() {
-        var currency = '<?php
-        $quote = Mage::getSingleton('checkout/session')->getQuote();
-        echo Mage::app()->getStore()->getBaseCurrencyCode();
-        ?>';
+
+        var currency = <?php echo "'" . $checkoutData['currency'] . "';"; ?>
+        console.log(currency);
 
         if (typeof quoteBaseGrandTotal === "undefined") {
-            var quoteBaseGrandTotal = <?php echo (float) $this->getBaseGrandTotal(); ?>;
+            var quoteBaseGrandTotal = <?php echo $checkoutData['grandTotal']; ?>;
         }
 
         StartCheckout.open({
             amount: quoteBaseGrandTotal * currency_multiplier, // e.g. 100 = $1.00
             currency: currency,
-            email: "<?php echo $quote->getBillingAddress()->getEmail(); ?>" // should be a customer email from order info
+            email: <?php echo "'" . $checkoutData['email'] . "'"; ?> // should be a customer email from order info
         });
+
     }
+
     Payment.prototype.save = Payment.prototype.save.wrap(function (save) {
         var validator = new Validation(this.form);
         if (jQuery("input[type='radio'][name='payment[method]']:checked").val() == "gateway") {
@@ -93,5 +111,5 @@ else
     </div>
 </div>
 <div>
-    <?php echo $this->getMethod()->getConfigData('message'); ?>
+    <?php echo $checkoutData['message']; ?>
 </div>
