@@ -17,20 +17,21 @@ else{
 $quote = Mage::getSingleton('checkout/session')->getQuote();
 
 $checkoutData['currency'] = Mage::app()->getStore()->getBaseCurrencyCode();
-$checkoutData['grandTotal'] = (float) $this->getBaseGrandTotal();
+
+
+$totals = Mage::getSingleton('checkout/session')->getQuote()->getTotals(); //Total object
+$checkoutData['grandTotal'] = round($totals["grand_total"]->getValue()); //Grandtotal value 
+
 $checkoutData['email'] = $quote->getBillingAddress()->getEmail();
 $checkoutData['message'] = $this->getMethod()->getConfigData('message');
 
-print "<pre>";
-print_r($checkoutData);
-print "</pre>";
 
 ?>
 <script>
     var currency_multiplier = <?php echo "'" . $checkoutData['currency_multiplier'] . "';"; ?>
 
     var key = <?php echo "'" . $checkoutData['key'] . "';"; ?>
-    
+
     if (StartCheckout) {
         StartCheckout.config({
             key: key,
