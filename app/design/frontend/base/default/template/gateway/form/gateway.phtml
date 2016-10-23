@@ -73,7 +73,6 @@ $checkoutData['message'] = $this->getMethod()->getConfigData('message');
     function openPaymentPopup() {
 
         var currency = <?php echo "'" . $checkoutData['currency'] . "';"; ?>
-        console.log(currency);
 
         if (typeof quoteBaseGrandTotal === "undefined") {
             var quoteBaseGrandTotal = <?php echo $checkoutData['grandTotal']; ?>;
