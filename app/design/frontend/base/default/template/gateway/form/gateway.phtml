@@ -1,8 +1,20 @@
 <?php
 
+$quote = Mage::getSingleton('checkout/session')->getQuote();
+
+$checkoutData['currency'] = Mage::app()->getStore()->getCurrentCurrencyCode();
+
+$totals = $quote->getTotals(); //Total object
+$checkoutData['grandTotal'] = $totals["grand_total"]->getValue(); //Grandtotal value
+
+$checkoutData['email'] = $quote->getBillingAddress()->getEmail();
+
+$checkoutData['message'] = $this->getMethod()->getConfigData('message');
+
+
 if (file_exists(MAGENTO_ROOT . '/data/currencies.json')) {
     $currency_json_data = json_decode(file_get_contents(MAGENTO_ROOT . '/data/currencies.json'), 1);
-    $checkoutData['currency_multiplier'] = floatval($currency_json_data[Mage::app()->getStore()->getCurrentCurrencyCode()]);
+    $checkoutData['currency_multiplier'] = floatval($currency_json_data[$checkoutData['currency']]);
 } else {
     $checkoutData['currency_multiplier'] = floatval(100);
 }
@@ -14,23 +26,29 @@ else{
     $checkoutData['key'] = $this->getMethod()->getConfigData('live_open_key');
 }
 
-$quote = Mage::getSingleton('checkout/session')->getQuote();
-
-$checkoutData['currency'] = Mage::app()->getStore()->getBaseCurrencyCode();
-
-
-$totals = Mage::getSingleton('checkout/session')->getQuote()->getTotals(); //Total object
-$checkoutData['grandTotal'] = round($totals["grand_total"]->getValue()); //Grandtotal value 
-
-$checkoutData['email'] = $quote->getBillingAddress()->getEmail();
-$checkoutData['message'] = $this->getMethod()->getConfigData('message');
-
+print "<pre>";
+print_r($checkoutData);
+print "</pre>";
 
 ?>
 <script>
-    var currency_multiplier = <?php echo "'" . $checkoutData['currency_multiplier'] . "';"; ?>
 
+    var currency_multiplier = <?php echo "'" . $checkoutData['currency_multiplier'] . "';"; ?>
     var key = <?php echo "'" . $checkoutData['key'] . "';"; ?>
+    var currency = <?php echo "'" . $checkoutData['currency'] . "';"; ?>
+
+    if (typeof quoteBaseGrandTotal === "undefined") {
+        var quoteBaseGrandTotal = <?php echo $checkoutData['grandTotal']; ?>;
+    }
+
+    var amount = quoteBaseGrandTotal * currency_multiplier; // e.g. 100 = $1.00
+    var email = <?php echo "'" . $checkoutData['email'] . "';"; ?> // should be a customer email from order info
+
+    console.log("key:" + key);
+    console.log("currency_multiplier:" + currency_multiplier);
+    console.log("currency:" + currency);
+    console.log("amount:" + amount);
+    console.log("email:" + email);
 
     if (StartCheckout) {
         StartCheckout.config({
@@ -72,16 +90,10 @@ $checkoutData['message'] = $this->getMethod()->getConfigData('message');
 
     function openPaymentPopup() {
 
-        var currency = <?php echo "'" . $checkoutData['currency'] . "';"; ?>
-
-        if (typeof quoteBaseGrandTotal === "undefined") {
-            var quoteBaseGrandTotal = <?php echo $checkoutData['grandTotal']; ?>;
-        }
-
         StartCheckout.open({
-            amount: quoteBaseGrandTotal * currency_multiplier, // e.g. 100 = $1.00
+            amount: amount,
             currency: currency,
-            email: <?php echo "'" . $checkoutData['email'] . "'"; ?> // should be a customer email from order info
+            email: email
         });
 
     }
