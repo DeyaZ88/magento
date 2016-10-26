@@ -26,29 +26,15 @@ else{
     $checkoutData['key'] = $this->getMethod()->getConfigData('live_open_key');
 }
 
-print "<pre>";
-print_r($checkoutData);
-print "</pre>";
-
 ?>
 <script>
 
     var currency_multiplier = <?php echo "'" . $checkoutData['currency_multiplier'] . "';"; ?>
     var key = <?php echo "'" . $checkoutData['key'] . "';"; ?>
     var currency = <?php echo "'" . $checkoutData['currency'] . "';"; ?>
-
-    if (typeof quoteBaseGrandTotal === "undefined") {
-        var quoteBaseGrandTotal = <?php echo $checkoutData['grandTotal']; ?>;
-    }
-
+    var quoteBaseGrandTotal = <?php echo $checkoutData['grandTotal']; ?>;
     var amount = quoteBaseGrandTotal * currency_multiplier; // e.g. 100 = $1.00
     var email = <?php echo "'" . $checkoutData['email'] . "';"; ?> // should be a customer email from order info
-
-    console.log("key:" + key);
-    console.log("currency_multiplier:" + currency_multiplier);
-    console.log("currency:" + currency);
-    console.log("amount:" + amount);
-    console.log("email:" + email);
 
     if (StartCheckout) {
         StartCheckout.config({
