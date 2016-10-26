@@ -29,14 +29,12 @@ else{
 ?>
 <script>
 
-    var currency_multiplier = <?php echo "'" . $checkoutData['currency_multiplier'] . "';"; ?>
-    var key = <?php echo "'" . $checkoutData['key'] . "';"; ?>
-    var currency = <?php echo "'" . $checkoutData['currency'] . "';"; ?>
-    var quoteBaseGrandTotal = <?php echo $checkoutData['grandTotal']; ?>;
-    var amount = quoteBaseGrandTotal * currency_multiplier; // e.g. 100 = $1.00
-    var email = <?php echo "'" . $checkoutData['email'] . "';"; ?> // should be a customer email from order info
+    
 
     if (StartCheckout) {
+
+        var key = <?php echo "'" . $checkoutData['key'] . "';"; ?>
+        
         StartCheckout.config({
             key: key,
             formLabel: 'Ok',
@@ -75,6 +73,12 @@ else{
     });
 
     function openPaymentPopup() {
+
+        var currency_multiplier = <?php echo "'" . $checkoutData['currency_multiplier'] . "';"; ?>
+        var currency = <?php echo "'" . $checkoutData['currency'] . "';"; ?>
+        var quoteBaseGrandTotal = <?php echo $checkoutData['grandTotal']; ?>;
+        var amount = quoteBaseGrandTotal * currency_multiplier; // e.g. 100 = $1.00
+        var email = <?php echo "'" . $checkoutData['email'] . "';"; ?> // should be a customer email from order info
 
         StartCheckout.open({
             amount: amount,
