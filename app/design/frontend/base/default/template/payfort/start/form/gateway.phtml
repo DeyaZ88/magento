@@ -1,0 +1,82 @@
+<?php 
+$checkoutData = $this->getData('checkoutData');
+?>
+<script>
+    function submitFormWithToken(params) {
+        // params.token.id, params.email are passed
+        
+        // remove old values if any
+        jQuery('input[name=payfortToken], input[name=payfortEmail]').remove();
+        console.log(params);
+        // Append the params to the form
+        frmCheckout = jQuery("#p_method_start");
+        frmCheckout.append("<input type='hidden' name='payfortToken' value='" + params.token.id + "'>");
+        frmCheckout.append("<input type='hidden' name='payfortEmail' value='" + params.email + "'>");
+
+        // Set text for entered card
+        //jQuery('#payfortCardDetails').show().html("<p>Pay with Card: xxxx-xxxx-xxxx-<b>" + params.token.card.last4 + "</b></p>");
+
+        //hide button
+        //jQuery('#btnCheckout').hide();
+
+        // show link to change card details
+        //jQuery('#changeCardBtn').show();
+        //payment.save();
+        jQuery('#p_method_start').submit();
+    }
+
+    jQuery(document).on('click', '#changeCardBtn', function (event) {
+        event.preventDefault();
+        openPaymentPopup();
+    });
+
+    function openPaymentPopup() {
+
+        var currency_multiplier = <?php echo "'" . $checkoutData['currency_multiplier'] . "';"; ?>
+        var currency = <?php echo "'" . $checkoutData['currency'] . "';"; ?>
+        var quoteBaseGrandTotal = <?php echo $checkoutData['grandTotal']; ?>;
+        var amount = quoteBaseGrandTotal * currency_multiplier; // e.g. 100 = $1.00
+        var email = <?php echo "'" . $checkoutData['email'] . "';"; ?> // should be a customer email from order info
+
+        StartCheckout.open({
+            amount: amount,
+            currency: currency,
+            email: email
+        });
+
+    }
+
+
+    Event.observe(window, "load", function(){
+        var key = <?php echo "'" . $checkoutData['key'] . "';"; ?>
+        
+        StartCheckout.config({
+            key: key,
+            formLabel: 'Ok',
+            tabOnMobile: true,
+            complete: function (params) {
+                submitFormWithToken(params); // params.token.id, params.email
+            },
+            cancel: function() {
+                // redirect to checkout page
+                window.location.href = '<?php echo Mage::getUrl('start/payment/cancelpayment', array('_secure' => true))?>';
+            } 
+
+        });
+        
+        openPaymentPopup();
+    });
+     
+</script>
+<div class="form-list" id="payment_form_<?php echo $this->getMethodCode() ?>" style="display:none;">
+    <div>
+        <div id='payfortCardDetails'></div>
+        <a id="changeCardBtn"  href="#_" style="display:none">Change Card Details</a>
+    </div>
+</div>
+<div>
+    <?php echo $checkoutData['message']; ?>
+</div>
+<form id="p_method_start" action="<?php echo Mage::getUrl('start/payment/processpayment', array('_secure' => true))?>" method="post">
+    
+</form>

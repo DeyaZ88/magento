@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+    <Payfort_Start>
+      <version>1.0.0.0</version>
+    </Payfort_Start>
+  </modules>
+
+  <global>
+    <fieldsets>
+      <sales_convert_quote_payment>
+      </sales_convert_quote_payment>
+    </fieldsets>
+
+    <helpers>
+      <start>
+        <class>Payfort_Start_Helper</class>
+      </start>
+    </helpers>
+
+    <blocks>
+      <start>
+        <class>Payfort_Start_Block</class>
+      </start>
+    </blocks>
+
+    <models>
+      <start>
+        <class>Payfort_Start_Model</class>
+      </start>
+      <start_adminhtml>
+            <class>Payfort_Start_Adminhtml_Model</class>
+        </start_adminhtml>
+    </models>
+
+    <resources>
+      <start_setup>
+        <setup>
+          <module>Payfort_Start</module>
+        </setup>
+      </start_setup>
+    </resources>
+  </global>
+
+  <default>
+    <payment>
+      <start>
+        <active>0</active>
+        <test_mode>1</test_mode>
+        <model>start/paymentmethod</model>
+        <!--<order_status>processing</order_status>-->
+        <title>Credit / Debit Card</title>
+        <allowspecific>0</allowspecific>
+        <payment_action>sale</payment_action>
+        <currency>USD,AED</currency>
+        <payment_action>authorize_capture</payment_action>
+      </start>
+    </payment>
+  </default>
+
+  <frontend>
+    <routers>
+      <start>
+        <use>standard</use>
+        <args>
+          <module>Payfort_Start</module>
+          <frontName>start</frontName>
+        </args>
+      </start>
+    </routers>
+  </frontend>
+</config>

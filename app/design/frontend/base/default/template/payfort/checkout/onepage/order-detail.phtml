@@ -1,0 +1,59 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * @author     Valerii Demidov
+ * @category   Cdev
+ * @package    Cdev_XPaymentsConnector
+ * @copyright  (c) Qualiteam Software Ltd. <info@qtmsoft.com>. All rights reserved.
+ * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+?>
+<?php
+/**
+ * Block for additional information  about  'recurring items'
+ *
+ * @see Cdev_XPaymentsConnector_Block_Checkout_Onepage_Orderdetail
+ */
+?>
+
+<?php
+$recurringQuoteItems = $this->getRecurringQuoteItems();
+?>
+
+<?php if(!empty($recurringQuoteItems)):?>
+    <div id="recurring-detail-block">
+        <strong><?php echo  $this->__('ATTENTION:');?></strong>
+        </br>
+        <?php echo  $this->__('Since this orders contains recurring products we charge your credit card several times:');?>
+        </br>
+        <ul>
+            <?php $simpleQuoteItemMessage = $this->getSimpleQuoteItemMessage(); ?>
+            <?php if ($simpleQuoteItemMessage): ?>
+                <li>
+                    <?php echo $simpleQuoteItemMessage; ?>
+                </li>
+            <?php endif; ?>
+            <?php foreach ($recurringQuoteItems as $recQuoteItem): ?>
+                <?php $recQuoteItemMessage = $this->getRecurringItemMessage($recQuoteItem); ?>
+                <?php if ($recQuoteItemMessage): ?>
+                    <li>
+                        <?php echo $recQuoteItemMessage; ?>
+                    </li>
+                <?php endif; ?>
+            <?php endforeach; ?>
+         </ul>
+    </div>
+<?php endif;?>
+
+
