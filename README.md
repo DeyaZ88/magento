@@ -9,11 +9,9 @@ This extension is customizable as you can configure it to meet your needs.
 
 ## Install
 
+extract magenot-payfort.zip
 
-Using FTP, upload entire content from inside upload folder to the root of your magento store.
-
-Note: please make sure the dir [Magento1 root folder]/var/connect is writable.
-
+Using FTP, upload entire extracted files to the root of your magento store.
 
 
 ## Changelog

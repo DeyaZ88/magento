@@ -1,0 +1,15 @@
+{
+    "name": "payfort/magento-plugin",
+    "config": {
+        "vendor-dir": "lib/Start"
+    },
+    "require": {
+        "payfort/start": "^0.1.0"
+    },
+    "authors": [
+        {
+            "name": "Pavel Gabriel",
+            "email": "start@payfort.com"
+        }
+    ]
+}

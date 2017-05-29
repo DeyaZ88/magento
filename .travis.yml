@@ -1,0 +1,14 @@
+sudo: required
+services:
+- docker
+before_install:
+- docker pull payfortstart/magento-test
+- docker build -t magento-plugin .
+- docker run --name app -d magento-plugin
+- docker ps -a
+script:
+- docker run --link app:app payfortstart/magento-test /bin/sh -c "xvfb-run -a  bundle
+  exec rspec"
+notifications:
+  slack:
+    secure: nx3qKgy5dxBfSAbB9RI3aCcNxupf+cQlYJvXatLMaPi8KnOpKxiPQwmjW13hNzggnsI+EicsFIUwflekI7k5Ojr3jxfXCq1ANBvyPPY/SZi3LaqN6dCy5vGdsWYTL5BkLfmtwpDqG3uuRUW7wwve1eDCOPBWy1rG3+R12M4912ttcBOXHLxs10CH+7rFpPOY9krNhw6LcE2+XpVP4aU2sJMIm2vqW20NPGtmb95Hv6Y8e1GPEQ0gDZbUKEX9zLB7CsvsXEa3pfP90x/hFfOQQ+MVqub9JMjvKuBL+LS3ZtCXDEqq/wbZ9UpGd6Y504bYORnR6xDvhl089WtwZ+5BukyEN8dr4vQpzh4N/uwImKlNLIVmHrVhhAaSUZkCTCfG1O2QDIGmTnRjWVyWtpnkzp8ideySHNPBhuewxQTskIxQdF5IzejWiki2ZM4xbxSdg32qV+U8XF9F85RcDc56GeSoWPjsDHo5Vlt/ooEIgBLnksW0eOPKSVVtYFBVFpSBeaVm0BSqFRsxC2KXx61gRTYcBWvq7g8V/zVym5A3lc3yeeFLecNrbaIIKcX/tU9K7BvKqqMK8Isd5DXsJaPQzXE4vBGxMgrum5DFnHP+hTIM1MjFbQfOrwutArurfPdQr+ajdk5Nbik4gfbSbtIDavSuojOVm6JkoVSLNJ1Gxno=
