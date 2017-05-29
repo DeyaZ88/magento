@@ -10,18 +10,10 @@ This extension is customizable as you can configure it to meet your needs.
 ## Install
 
 
-Using FTP, upload entire contetn from inside upload folder to the root of your opencart store.
+Using FTP, upload entire content from inside upload folder to the root of your magento store.
 
 Note: please make sure the dir [Magento1 root folder]/var/connect is writable.
 
-
-## Upgrade
-
-1. Open your administration panel and go to System → Magento Connect → Magento Connect Manager. 
-
-2. uninstall FORT_Payment_Gateway
-
-3. Reinstall the new FORT_Payment_Gateway plugin.
 
 
 ## Changelog
