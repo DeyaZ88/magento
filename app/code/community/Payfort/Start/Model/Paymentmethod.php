@@ -204,6 +204,7 @@ class Payfort_Start_Model_Paymentmethod extends Mage_Payment_Model_Method_Abstra
             } else {
                 $payment->setIsTransactionClosed(0);
             }
+            Mage::getSingleton('checkout/cart')->truncate()->save();
             header('location:'.Mage::getUrl('checkout/onepage/success', array('_secure' => true)));
             exit;
 
@@ -296,8 +297,8 @@ class Payfort_Start_Model_Paymentmethod extends Mage_Payment_Model_Method_Abstra
     
     public function getOrderPlaceRedirectUrl()
     {
-        //$session = Mage::getSingleton('checkout/session');
-        //$session->getQuote()->setIsActive(1)->save();
+        $session = Mage::getSingleton('checkout/session');
+        $session->getQuote()->setIsActive(1)->save();
         return Mage::getUrl('start/payment/redirect', array('_secure' => true));
     }
     
@@ -378,28 +379,14 @@ class Payfort_Start_Model_Paymentmethod extends Mage_Payment_Model_Method_Abstra
     
     public function refillCart($order)
     {
-        if (empty($order)) {
-            return;
-        }
-        $session  = Mage::getSingleton('checkout/session');
-        $cart     = Mage::getSingleton('checkout/cart');
-        $cart_qty = (int) $cart->getQuote()->getItemsQty();
-        if ($cart_qty) {
-            return;
-        }
-        if ($order->getId()) {
-            $items = $order->getItemsCollection();
-            foreach ($items as $item) {
-                try {
-                    $cart->addOrderItem($item);
-                } catch (Mage_Core_Exception $e) {
-                    $session->addError($e->getMessage());
-                    Mage::logException($e);
-                    continue;
-                }
-            }
-            $cart->save();
-            $cart_qty = (int) $cart->getQuote()->getItemsQty();
+        $quote = Mage::getModel('sales/quote')->load($order->getQuoteId());
+        if ($quote->getId()) {
+            $quote->setIsActive(1)
+                //->setReservedOrderId(null)
+                ->save();
+            Mage::getSingleton('checkout/session')
+                ->replaceQuote($quote);
+               // ->unsLastRealOrderId();
         }
     }
 
